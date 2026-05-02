@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidStudent(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.totalPoints is number &&
+             data.keys().hasAll(['name', 'totalPoints', 'createdAt']) &&
+             data.keys().size() == 3;
+    }
+
+    match /students/{studentId} {
+      // For this app, we allow public read/write for simplicity as per common quick-build patterns, 
+      // but ideally we'd want auth. For now, since user didn't mention auth, we'll keep it open
+      // but protected by structural validation.
+      allow read: if true;
+      allow create: if isValidId(studentId) && isValidStudent(request.resource.data);
+      allow update: if isValidId(studentId) && isValidStudent(request.resource.data) &&
+                      request.resource.data.name == resource.data.name; // Name is immutable
+      allow delete: if false; // Prevention of accidental loss
+    }
+  }
+}

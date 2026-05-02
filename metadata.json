@@ -1,0 +1,6 @@
+{
+  "name": "O'quvchilar Reytingi",
+  "description": "O'quvchilar ballarini hisoblash va Telegram kanalga hisobot yuborish tizimi",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

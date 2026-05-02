@@ -1,0 +1,21 @@
+{
+  "entities": {
+    "Student": {
+      "title": "Student",
+      "description": "Represents a student and their score",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Student's full name" },
+        "totalPoints": { "type": "number", "description": "Cumulative points earned by the student" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the student was added" }
+      },
+      "required": ["name", "totalPoints"]
+    }
+  },
+  "firestore": {
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Collection of students and their ratings"
+    }
+  }
+}
